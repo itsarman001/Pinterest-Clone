@@ -17,22 +17,35 @@ router.get('/', function (req, res, next) {
 
 // Profile Route
 router.get('/profile', isLoggedIn, function (req, res, next) {
-  res.send('Profile');
+  res.render('Profile');
 });
 
-// Register Routhe
+// Profile Route
+router.get('/feed', isLoggedIn, function (req, res, next) {
+  res.send('feed');
+});
+
+// Register Route
+router.get('/register', (req, res) => {
+  res.render('register');
+});
+
 router.post('/register', (req, res) => {
   const { username, email, fullname } = req.body;
   const userData = new userModel({ username, email, fullname });
 
   userModel.register(userData, req.body.password).then(() => {
-    passport.authenticate('local')(req, res, () => res.redirect('/feed'))
+    passport.authenticate('local')(req, res, () => res.redirect('/profile'))
   });
 });
 
 // Login route
+router.get('/login', (req, res) => {
+  res.render('login');
+});
+
 router.post('/login', passport.authenticate('local', {
-  successRedirect: '/feed',
+  successRedirect: '/profile',
   failureRedirect: '/login'
 }), (req, res)=>{});
 
