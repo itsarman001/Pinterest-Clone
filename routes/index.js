@@ -5,6 +5,9 @@ var router = express.Router();
 const userModel = require('./users');
 const postModel = require('./posts');
 
+// Multer
+const upload = require('./multer');
+
 // Passport
 const passport = require('passport');
 const localStrategy = require('passport-local');
@@ -16,12 +19,15 @@ router.get('/', function (req, res, next) {
 });
 
 // Profile Route
-router.get('/profile', isLoggedIn, function (req, res, next) {
-  res.render('Profile');
+router.get('/profile', isLoggedIn, async function (req, res, next) {
+  const user = await userModel.findOne({
+    username: req.session.passport.user
+  }).populate('posts')
+  res.render('Profile', { user });
 });
 
 // Profile Route
-router.get('/feed', isLoggedIn, function (req, res, next) {
+router.get('/feed', function (req, res, next) {
   res.send('feed');
 });
 
@@ -41,26 +47,42 @@ router.post('/register', (req, res) => {
 
 // Login route
 router.get('/login', (req, res) => {
-  res.render('login');
+  res.render('login', { error: req.flash('error') });
 });
 
 router.post('/login', passport.authenticate('local', {
   successRedirect: '/profile',
-  failureRedirect: '/login'
-}), (req, res)=>{});
+  failureRedirect: '/login',
+  failureFlash: true
+}), (req, res) => { });
 
 // Logout Route
-router.get('/logout', (req, res)=>{
-  req.logout((err)=>{
-    if (err) {return next(err);}
+router.get('/logout', (req, res) => {
+  req.logout((err) => {
+    if (err) { return next(err); }
     res.redirect('/')
   });
 });
 
 // Adding Authentication Protection
-function isLoggedIn (req, res, next) {
-  if(req.isAuthenticated()) return next();
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) return next();
   res.redirect('/login');
 };
+
+router.post('/upload', isLoggedIn, upload.single('file'), async (req, res) => {
+  if (!req.file) {
+    return res.status(404).send('No files were uploaded.');
+  }
+  const user = await userModel.findOne({ username: req.session.passport.user });
+  const post = await postModel.create({
+    image: req.file.filename,
+    postText: req.body.fileCaption,
+    user: user._id
+  });
+  user.posts.push(post._id)
+  await user.save()
+  res.redirect('/profile')
+});
 
 module.exports = router;

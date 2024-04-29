@@ -12,76 +12,37 @@
 
     <main class="container-fluid">
         <div class="card d-flex align-items-center justify-content-center pt-3">
-            <img src="/images/pinterest-48.svg" class="card-img-top" alt="logo" style="width: 48px;">
+            <img src="/images/dp.jpg" class="card-img-top rounded-circle" alt="logo"
+                style="width: 180px; height: 180px;">
             <div class="card-body text-center w-50">
-                <h5 class="card-title">Welcome, #username</h5>
-                <p class="card-text ">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aut possimus amet labore quod repellendus sapiente soluta! Maiores, minus accusamus numquam labore maxime laudantium ipsa.</p>
+                <h5 class="card-title">Welcome, <span style="text-transform: uppercase;">
+                        <%= user.fullname %>
+                    </span></h5>
+                <h5 class="card-title">@<%= user.username %>
+                </h5>
+                <p class="card-text ">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aut possimus amet labore
+                    quod repellendus sapiente soluta! Maiores, minus accusamus numquam labore maxime laudantium ipsa.
+                </p>
+                <form action="/upload" class="mb-3" method="post" enctype="multipart/form-data">
+                    <input type="text" name="fileCaption">
+                    <input type="file" name="file">
+                    <button type="submit">Post</button>
+                </form>
+                <a href="/logout" class="btn btn-danger">Logout</a>
             </div>
         </div>
-        <section class="board my-2 d-flex flex-wrap gap-3">
-            <div class="card w-25 d-flex align-items-center justify-content-center">
-                <img src="/images/pinterest-48.svg" style="width: 100px;" class="card-img-top" alt="...">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Board</h5>
-                    <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero, repellendus!</p>
+        <section class="board my-2 d-flex align-items-start flex-wrap gap-3">
+            <% user.posts.forEach((post)=>{ %>
+                <div class="card w-25 d-flex align-items-center justify-content-center">
+                    <img src="/images/uploads/<%= post.image %>" style="width: 100px;" class="card-img-top" alt="...">
+                    <div class="card-body text-center">
+                        <!-- <h5 class="card-title">Board</h5> -->
+                        <p class="card-text"><%= post.postText %></p>
+                    </div>
                 </div>
-            </div>
+            <% }); %>
+            
 
-            <div class="card w-25 d-flex align-items-center justify-content-center">
-                <img src="/images/pinterest-48.svg" style="width: 100px;" class="card-img-top" alt="...">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Board</h5>
-                    <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero, repellendus!</p>
-                </div>
-            </div>
-
-            <div class="card w-25 d-flex align-items-center justify-content-center">
-                <img src="/images/pinterest-48.svg" style="width: 100px;" class="card-img-top" alt="...">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Board</h5>
-                    <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero, repellendus!</p>
-                </div>
-            </div>
-
-            <div class="card w-25 d-flex align-items-center justify-content-center">
-                <img src="/images/pinterest-48.svg" style="width: 100px;" class="card-img-top" alt="...">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Board</h5>
-                    <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero, repellendus!</p>
-                </div>
-            </div>
-
-            <div class="card w-25 d-flex align-items-center justify-content-center">
-                <img src="/images/pinterest-48.svg" style="width: 100px;" class="card-img-top" alt="...">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Board</h5>
-                    <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero, repellendus!</p>
-                </div>
-            </div>
-
-            <div class="card w-25 d-flex align-items-center justify-content-center">
-                <img src="/images/pinterest-48.svg" style="width: 100px;" class="card-img-top" alt="...">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Board</h5>
-                    <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero, repellendus!</p>
-                </div>
-            </div>
-
-            <div class="card w-25 d-flex align-items-center justify-content-center">
-                <img src="/images/pinterest-48.svg" style="width: 100px;" class="card-img-top" alt="...">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Board</h5>
-                    <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero, repellendus!</p>
-                </div>
-            </div>
-
-            <div class="card w-25 d-flex align-items-center justify-content-center">
-                <img src="/images/pinterest-48.svg" style="width: 100px;" class="card-img-top" alt="...">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Board</h5>
-                    <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero, repellendus!</p>
-                </div>
-            </div>
         </section>
     </main>
 
